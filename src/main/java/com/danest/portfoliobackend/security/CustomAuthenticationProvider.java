@@ -3,6 +3,7 @@ package com.danest.portfoliobackend.security;
 import java.util.Arrays;
 
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -22,16 +23,15 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
-        String username = authentication.getName();
-        String password = authentication.getCredentials().toString();
+        String usernameGiven = authentication.getName();
+        String passwordGiven = authentication.getCredentials().toString();
 
-        UserDetails userFound = userDetailsService.loadUserByUsername(username);
+        UserDetails userFound = userDetailsService.loadUserByUsername(usernameGiven);
 
-        if (userFound.getPassword().equals(password))
-
-            return new UsernamePasswordAuthenticationToken(username, password, Arrays.asList());
+        if (userFound.getPassword().equals(passwordGiven))
+            return new UsernamePasswordAuthenticationToken(usernameGiven, passwordGiven, Arrays.asList());
         else
-            throw new UnsupportedOperationException("Unimplemented method 'authenticate'");
+            throw new BadCredentialsException("Bad credentials");
     }
 
     @Override

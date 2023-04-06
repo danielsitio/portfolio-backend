@@ -28,7 +28,13 @@ public class WebAuthorizationConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authz -> authz.anyRequest().authenticated()).httpBasic(withDefaults());
+        /*
+         * http.authorizeHttpRequests(authz -> authz.anyRequest().authenticated())
+         * .httpBasic(c -> c.realmName("El realm de daniel"));
+         */
+        http.authorizeHttpRequests(authz -> authz.anyRequest().authenticated())
+                // .formLogin(fl -> fl.defaultSuccessUrl("/test", true))
+                .httpBasic(hb -> hb.realmName("daniel realm"));
         return http.build();
     }
 }
