@@ -1,7 +1,5 @@
 package com.danest.portfoliobackend.model;
 
-import java.util.Date;
-
 public class Project {
     private String name;
     private String description;

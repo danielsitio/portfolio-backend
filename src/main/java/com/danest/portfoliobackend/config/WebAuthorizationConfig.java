@@ -2,12 +2,12 @@ package com.danest.portfoliobackend.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import static org.springframework.security.config.Customizer.withDefaults;;
 
 @Configuration
 public class WebAuthorizationConfig {
@@ -28,13 +28,12 @@ public class WebAuthorizationConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        /*
-         * http.authorizeHttpRequests(authz -> authz.anyRequest().authenticated())
-         * .httpBasic(c -> c.realmName("El realm de daniel"));
-         */
-        http.authorizeHttpRequests(authz -> authz.anyRequest().authenticated())
-                // .formLogin(fl -> fl.defaultSuccessUrl("/test", true))
-                .httpBasic(hb -> hb.realmName("daniel realm"));
+        http.authorizeHttpRequests(auth -> auth
+                .requestMatchers(HttpMethod.POST, "/addProject").authenticated()
+                .anyRequest().permitAll())
+                .httpBasic(hb -> hb
+                        .realmName("daniel realm"))
+                .csrf().disable();
         return http.build();
     }
 }
