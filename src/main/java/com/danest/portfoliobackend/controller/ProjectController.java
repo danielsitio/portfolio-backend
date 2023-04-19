@@ -16,26 +16,29 @@ import org.springframework.web.bind.annotation.RestController;
 import com.danest.portfoliobackend.model.Project;
 
 @RestController
-@RequestMapping("project")
+@RequestMapping("/project")
 @CrossOrigin
 public class ProjectController {
+
+    private List<Project> projects = new ArrayList<>();
 
     public ProjectController() {
     }
 
     @GetMapping("getAll")
     List<Project> getProjects() {
-        return List.of();
+        return this.projects;
     }
 
     @PostMapping("/add")
     Project addProject(@RequestBody Project newProject) {
+        this.projects.add(newProject);
         return newProject;
     }
 
     @DeleteMapping("/delete")
-    String deleteProject(@RequestParam String projectId) {
-        return "projecto borrado";
+    void deleteProject(@RequestParam String projectId) {
+        this.projects.remove(0);
     }
 
     @PatchMapping("/modify")
