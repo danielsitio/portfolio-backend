@@ -2,6 +2,7 @@ package com.danest.portfoliobackend.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.danest.portfoliobackend.dto.ProjectInput;
 import com.danest.portfoliobackend.model.Project;
 
 @RestController
@@ -31,14 +33,20 @@ public class ProjectController {
     }
 
     @PostMapping("/add")
-    Project addProject(@RequestBody Project newProject) {
+    Project addProject(@RequestBody ProjectInput projectInput) {
+        Project newProject = new Project(projectInput.getName(), projectInput.getDescription());
         this.projects.add(newProject);
         return newProject;
     }
 
     @DeleteMapping("/delete")
-    void deleteProject(@RequestParam String projectId) {
-        this.projects.remove(0);
+    void deleteProject(@RequestParam int projectId) {
+        for (int index = 0; index < projects.size(); index++) {
+            if (projects.get(index).getId() == projectId) {
+                this.projects.remove(index);
+                break;
+            }
+        }
     }
 
     @PatchMapping("/modify")
